@@ -10,8 +10,8 @@ var getElementsByClassName = function(className) {
   function traverse(element) {
     if (element.classList && element.classList.contains(className)) result.push(element);
     var children = Array.prototype.slice.call(element.childNodes);
-    children.forEach(function(item) {
-      traverse(item);
+    children.forEach(function(child) {
+      traverse(child);
     });
   };
 
