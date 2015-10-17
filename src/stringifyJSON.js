@@ -2,7 +2,33 @@
 // var stringifyJSON = JSON.stringify;
 
 // but you don't so you're going to write it from scratch:
-
 var stringifyJSON = function(obj) {
-  // your code goes here
+  switch (typeof obj) {
+    case 'string':
+      return '"' + obj + '"';
+    case 'function', 'undefined':
+      return '{}';
+    case 'object':
+      if (obj) {
+        if (Array.isArray(obj)) {
+          var vals = [];
+          for (var i = 0; i < obj.length; i++) {
+            vals.push(stringifyJSON(obj[i]));
+          };
+          return '[' + vals.join(',') + ']';
+        } else {
+          var vals = [];
+          for (var key in obj) {
+            //need to skip function and undefined
+            if (typeof obj[key] !== 'function' && typeof obj[key] !== 'undefined')
+              vals.push(stringifyJSON(key) + ":" + stringifyJSON(obj[key]));
+          }
+          return '{' + vals.join(',') + '}';
+        }
+      } else {
+        return 'null';
+      }
+    default:
+      return obj.toString();
+  }
 };
