@@ -107,13 +107,14 @@ var parseJSON = function(json) {
     white();
     getNext();
     if (chr === ']') {
+      getNext();
       return arr;
     }
 
     while (chr) {
       arr.push(parseValue());
       white();
-      if (chr === ']') return arr;
+      if (chr === ']') {getNext(); return arr;}
       expect(',');
       white();
     }
@@ -144,7 +145,7 @@ var parseJSON = function(json) {
       //parse value
       obj[key] = parseValue();
       white();
-      if (chr === '}') return obj;
+      if (chr === '}') {getNext(); return obj;}
       expect(',');
       white();
     }
@@ -167,3 +168,26 @@ var parseJSON = function(json) {
   }
   return parseValue();
 }
+
+
+var input = [
+  '[]',
+  '{"foo": ""}',
+  '{}',
+  '{"foo": "bar"}',
+  '["one", "two"]',
+  '{"a": "b", "c": "d"}',
+  '[null,false,true]',
+  '{"foo": true, "bar": false, "baz": null}',
+  '[1, 0, -1, -0.3, 0.3, 1343.32, 3345, 0.00011999999999999999]',
+  '{"boolean, true": true, "boolean, false": false, "null": null }',
+  '{"a":{"b":"c"}}',
+  '{"a":["b", "c"]}',
+  '[{"a":"b"}, {"c":"d"}]',
+  '{"a":[],"c": {}, "b": true}',
+  '[[[["foo"]]]]'
+];
+
+input.forEach(function(item) {
+  console.log(parseJSON(item));
+});
