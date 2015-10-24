@@ -17,7 +17,7 @@ var parseJSON = function(json) {
   //test that current char is expected value and then get next char
   var expect = function(c) {
     if (c && c !== chr) {
-      error("Expecting '" + c + "' instead of '" + chr + "'");
+      error("expecting '" + c + "' instead of '" + chr + "'");
     }
     getNext();
   };
@@ -66,9 +66,8 @@ var parseJSON = function(json) {
       } else {
         str += chr;
       }
-
     }
-    error('Invalid String');
+    error('error parsing string');
   };
 
   var word = function() {
@@ -94,7 +93,7 @@ var parseJSON = function(json) {
         expect('l');
         return null;
     }
-    error("Unexpected '" + chr + "'");
+    error("error parsing word, unexpected '" + chr + "'");
   };
 
   var number = function() {
@@ -140,7 +139,7 @@ var parseJSON = function(json) {
       }
       expect(',');
     }
-    error('error parsing array!');
+    error('error parsing array');
   };
 
   var object = function() {
@@ -156,14 +155,15 @@ var parseJSON = function(json) {
     }
 
     while (chr) {
-      //parse key
+      //parse object key
       if (chr === '"') {
         key = string();
       } else {
-        throw ('invalid object key');
+        throw ('error parsing object key');
       }
       white();
       expect(':');
+      //parse object value
       obj[key] = parseValue();
       white();
       if (chr === '}') {
@@ -173,7 +173,7 @@ var parseJSON = function(json) {
       expect(',');
       white();
     }
-    error('invalid object!');
+    error('error parsing object');
   };
 
   var parseValue = function() {
