@@ -3,12 +3,17 @@
 
 // but you don't so you're going to write it from scratch:
 var stringifyJSON = function(obj) {
-  switch (typeof obj) {
-    case 'string':
+  var types = {
+    'string': function() {
       return '"' + obj + '"';
-    case 'function', 'undefined':
+    },
+    'function': function() {
       return '{}';
-    case 'object':
+    },
+    'undefined': function() {
+      return '{}';
+    },
+    'object': function() {
       if (obj) {
         if (Array.isArray(obj)) {
           var vals = [];
@@ -28,7 +33,13 @@ var stringifyJSON = function(obj) {
       } else {
         return 'null';
       }
-    default:
-      return obj.toString();
+    }
+  };
+
+  var type = typeof obj;
+  if (typeof types[type] === 'function') {
+    return types[type]();
+  } else {
+    return obj.toString();
   }
 };
