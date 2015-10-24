@@ -7,7 +7,7 @@
 var getElementsByClassName = function(className) {
   var result = [];
 
-  function traverse(element) {
+  var traverse = function (element) {
     if (element.classList && element.classList.contains(className)) result.push(element);
     var children = Array.prototype.slice.call(element.childNodes);
     children.forEach(function(child) {
@@ -15,8 +15,7 @@ var getElementsByClassName = function(className) {
     });
   };
 
-  var body = document.body;
-  traverse(body);
+  traverse(document.body);
 
   return result;
 }
