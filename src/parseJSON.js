@@ -22,6 +22,18 @@ var parseJSON = function(json) {
     getNext();
   };
 
+  var expectChars = function(str) {
+    var strArray = str.split('');
+    strArray.forEach(function(c) {
+      expect(c);
+    });
+  };
+
+  var isNum = function() {
+    var reg = new RegExp('^\\d{1}$');
+    return reg.test(chr);
+  }
+
   //skip white space
   var white = function() {
     while (chr && chr <= ' ') {
@@ -71,46 +83,37 @@ var parseJSON = function(json) {
   };
 
   var word = function() {
-    //true,false,null
-    switch (chr) {
-      case 't':
-        expect('t');
-        expect('r');
-        expect('u');
-        expect('e');
-        return true;
-      case 'f':
-        expect('f');
-        expect('a');
-        expect('l');
-        expect('s');
-        expect('e');
-        return false;
-      case 'n':
-        expect('n');
-        expect('u');
-        expect('l');
-        expect('l');
-        return null;
+    if (chr === 't') {
+      expectChars('true');
+      return true;
+    } else if (chr === 'f') {
+      expectChars('false');
+      return false;
+    } else if (chr === 'n') {
+      expectChars('null');
+      return null;
     }
+
     error("error parsing word, unexpected '" + chr + "'");
   };
 
   var number = function() {
+    //need error handling here
+    //test for odd cases 
     var num, str = '';
 
     if (chr === '-') {
       str = '-';
       getNext();
     }
-    while (chr >= '0' && chr <= '9') {
+    while (isNum()) {
       str += chr;
       getNext();
     }
     if (chr === '.') {
       str += '.';
       getNext();
-      while (chr >= '0' && chr <= '9') {
+      while (isNum()) {
         str += chr;
         getNext();
       }
@@ -178,16 +181,18 @@ var parseJSON = function(json) {
 
   var parseValue = function() {
     white();
-    if (chr === '{') {
-      return object();
-    } else if (chr === '[') {
-      return array();
-    } else if (chr === '"') {
-      return string();
-    } else if (chr === '-') {
-      return number();
+
+    var actions = {
+      '{': object,
+      '[': array,
+      '"': string,
+      '-': number
+    };
+
+    if (typeof actions[chr] === 'function') {
+      return actions[chr]();
     } else {
-      return chr >= '0' && chr <= '9' ? number() : word();
+      return isNum() ? number() : word();
     }
   }
 
