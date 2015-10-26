@@ -3,9 +3,13 @@
 
 // but you don't so you're going to write it from scratch:
 var stringifyJSON = function(obj) {
+  var string = function(val) {
+    return '"' + val + '"';
+  };
+
   var types = {
     'string': function() {
-      return '"' + obj + '"';
+      return string(obj);
     },
     'function': function() {
       return '{}';
@@ -17,16 +21,16 @@ var stringifyJSON = function(obj) {
       if (obj) {
         if (Array.isArray(obj)) {
           var vals = [];
-          for (var i = 0; i < obj.length; i++) {
-            vals.push(stringifyJSON(obj[i]));
-          };
+          obj.forEach(function(item) {
+            vals.push(stringifyJSON(item));
+          });
           return '[' + vals.join(',') + ']';
         } else {
           var vals = [];
           for (var key in obj) {
             //need to skip function and undefined
             if (typeof obj[key] !== 'function' && typeof obj[key] !== 'undefined')
-              vals.push(stringifyJSON(key) + ":" + stringifyJSON(obj[key]));
+              vals.push(string(key) + ":" + stringifyJSON(obj[key]));
           }
           return '{' + vals.join(',') + '}';
         }

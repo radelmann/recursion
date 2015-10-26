@@ -16,6 +16,5 @@ var getElementsByClassName = function(className) {
   };
 
   traverse(document.body);
-
   return result;
 }
