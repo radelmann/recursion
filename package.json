@@ -1,0 +1,22 @@
+{
+  "name": "recursion",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "watch-http-server ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/radelmann/recursion.git"
+  },
+  "author": "radelmann",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/radelmann/recursion/issues"
+  },
+  "homepage": "https://github.com/radelmann/recursion#readme",
+  "dependencies": {
+    "watch-http-server": "^0.7.6"
+  }
+}
